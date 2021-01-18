@@ -2,11 +2,13 @@ from pageObjects.LoginPage import  LoginPage
 from utilities.ReadConfig import ReadConfig
 from utilities.cusomLogger import LogGenerator
 from selenium.webdriver.support.wait import WebDriverWait
+import pytest
 
 class Test_login():
 
     logger = LogGenerator.setup_log()
 
+    @pytest.mark.sanity
     def test_login_page_load(self,access_login_page, browser,environment):
         """
         Test case to validate login page can be accessed
@@ -26,6 +28,7 @@ class Test_login():
             assert False
         self.driver.close()
 
+    @pytest.mark.sanity
     def test_validate_user_login(self,access_login_page, browser,environment):
         """
         Testcase to valdiate user can login with valid credentials
@@ -51,6 +54,7 @@ class Test_login():
             self.logger.error("Status- Failed. Screenshot")
             assert False
 
+    @pytest.mark.regression
     def test_login_fail_with_invalid_credentials(self, access_login_page, browser,environment):
         """
         Test case to validate if user cannot login with invalid credentials
