@@ -1,8 +1,34 @@
 node(params.Run_node) {
     checkOutCode()
 
+    setupViritualEnv()
 }
 
 def checkOutCode(){
     git poll: false, url: 'https://github.com/josejerald/hybridframework'
+}
+
+def setupViritualEnv(){
+    projectPath = "${WORKSPACE}\\"
+    vEnvironmentPath = "${WORKSPACE}\\venv"
+
+    stage('Create/Activate Virtual Environment'){
+	    dir(projectPath) {
+            bat "virtualenv venv"
+            dir ("${vEnvironmentPath}\\Scripts"){
+                bat "activate.bat"
+                bat "pip install virtualenvwrapper-win"
+			}
+		}
+	}
+
+	stage("Insall Test Libraries"){
+	    dir(vEnvironmentPath){
+		    dir ("Scripts"){
+		        bat "workon venv"
+				bat "python -m pip install -U pip"
+				bat "pip install -r ${projectPath}Configuration//requirements.txt"
+			}
+	    }
+	}
 }
